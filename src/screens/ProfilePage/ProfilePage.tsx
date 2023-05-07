@@ -1,4 +1,4 @@
-import { Button, Card, Col, Image, Row, Typography } from 'antd'
+import { Button, Card, Col, Empty, Image, Row, Typography } from 'antd'
 import { motion } from 'framer-motion'
 import moment from 'moment'
 import { useLayoutEffect, useState } from 'react'
@@ -60,6 +60,7 @@ export const ProfilePage = () => {
                 <MenuOutlined style={{ fontSize: 20 }} />
               )}
             </Row>
+            { mobile ? <div className='close-menu' onClick={() => setMobile(false)}></div> : null}
             <Row
               gutter={[20, 20]}
               style={{ marginTop: 30, left: mobile ? '0%' : '-100%' }}
@@ -115,7 +116,6 @@ export const ProfilePage = () => {
                     style={{
                       width: '100%',
                       border: 'none',
-                      // height: 235,
                       padding: 0,
                       background: '#ffffff',
                     }}
@@ -126,7 +126,6 @@ export const ProfilePage = () => {
                           className="CardProfile_img"
                           alt="example"
                           src={card?.photos[0] ? card.photos[0].image_url : '/dogg.jpg'}
-                          // style={{ width: 215, height: 195, borderRadius: 6 }}
                         />
                       </Col>
                       <Col className="CardProfile-wrapper_content">
@@ -172,17 +171,7 @@ export const ProfilePage = () => {
                 </motion.div>
               ))
             ) : (
-              <Typography.Title
-                level={4}
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                <Image preview={false} src="/noData.png.png" width={100} /> пока нет ваших
-                обьявлений(
-              </Typography.Title>
+              <Empty description='Обяъвления отсутствуют'/>
             )}
           </Col>
         ) : (

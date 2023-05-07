@@ -1,9 +1,19 @@
-import  { useEffect, useState } from 'react'
+import { AxiosError } from 'axios'
+import { motion } from 'framer-motion'
+import React, { useEffect, useState } from 'react'
+
 import { CardMain } from '@components/index'
-import { favorites } from '@store/favorites/favoriteId'
-import { FavoritesType,} from '@typess/types'
-import './favorites.scss'
-import { Typography, Empty, Col } from 'antd'
+import { favorites, likeAnnoun } from '@store/favorites/favoriteId'
+import {
+  AnnouncementCardType,
+  CardType,
+  FavoritesAnnounsmentType,
+  FavoritesType,
+} from '@typess/types'
+import { errorHandler } from '@utils/errorHandler'
+
+import api from '../../api/index'
+import { Empty, Image, Typography } from 'antd'
 
 function Favorites() {
   const [announcement, setAnnouncement] = useState<FavoritesType[]>([])
@@ -16,25 +26,31 @@ function Favorites() {
     })
   }, [])
 
-  console.log(announcement)
+  const removeFavorite = async (slug: string) => {
+    const data = announcement.filter((item) => item.announcement != slug)
+    setAnnouncement(data)
+    await likeAnnoun(slug)
+  }
 
   return (
-    <div className="favorites">
-      <Typography.Title level={3}>Избранные</Typography.Title>
-      <Col className='favorites__list'>
-        {announcement && announcement[0]
-          ? announcement.map(({ photos, announsment }) => (
-              <CardMain
-                type="main"
-                key={announsment.slug}
-                value={{ ...announsment, photos }}
-              />
-            ))
-          : 
-          <Empty description="Избранные отсутствуют" />
-          }
-      </Col>
-    </div>
+    <motion.div
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="announcements"
+      style={{minHeight: '70vh'}}
+    >
+      {announcement && announcement[0]
+        ? announcement.map(({ photos, announsment }) => (
+            <CardMain
+              type="profile"
+              removeFavorite={removeFavorite}
+              key={announsment.slug}
+              value={{ ...announsment, photos }}
+            />
+          ))
+        : <Empty description='Обяъвления отсутствуют'/>}
+    </motion.div>
   )
 }
 

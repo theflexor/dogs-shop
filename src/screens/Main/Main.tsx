@@ -2,6 +2,7 @@ import {
   Button,
   Card,
   Col,
+  Empty,
   Image,
   Input,
   InputRef,
@@ -38,7 +39,7 @@ import { debounce } from '@utils/debounce'
 import './main.scss'
 
 export const Main = () => {
-  const [params, setParams] = useState<AnnouncementFilterType>({})
+  const [params, setParams] = useState<AnnouncementFilterType>({lower_price: '0'})
   const [orgParams, setOrgParams] = useState<OrgParams>({})
   const [announ, setAnnoun] = useState<AnnouncementCardType[]>([])
   const [orgs, setOrgs] = useState<OrganizarionType[]>([])
@@ -60,7 +61,7 @@ export const Main = () => {
       setParams({
         ...params,
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        [e.target.name]: +e.target.dataset.value!,
+        [e.target.name]: e.target.dataset.value == '0' ? '0' : e.target.dataset.value,
       })
     }
     setParams({ ...params, [e.target.name]: e.target.value })
@@ -194,8 +195,10 @@ export const Main = () => {
         )}{' '}
       </Row>
       <Layout style={{ display: 'flex', gap: '30px', overflow: 'hidden' }}>
+      {mobile ? <div onClick={() => setMobile(false)} className='close-menu'></div> : null}
         <Sider className="sideBar" style={{ left: mobile ? '0%' : '-100%' }}>
           {mainType == 'announ' ? (
+            <>
             <Row>
               <Col style={{ width: '100%' }}>
                 <Row className="sideBar_title">
@@ -253,7 +256,7 @@ export const Main = () => {
                   Договорная
                 </Button>
               </Col>
-              <Col style={{ width: '100%' }}>
+              <Col style={{ width: '100%', marginTop: '20px' }}>
                 <Typography.Title level={5}>Город/Регион</Typography.Title>
                 {/* <Input
                 placeholder="Весь Кыргызстан"
@@ -277,6 +280,8 @@ export const Main = () => {
                 </Select>
               </Col>
             </Row>
+            
+            </>
           ) : (
             <Row className="sideBar_org">
               <Col>
@@ -334,7 +339,7 @@ export const Main = () => {
           {mainType == 'announ' ? (
             announ && announ[0] ? (
               announ.map((value) => (
-                <CardMain key={value.slug} value={value} type="main" />
+                <CardMain removeFavorite={() => ''}  key={value.slug} value={value} type="main" />
               ))
             ) : (
               <motion.div
@@ -343,9 +348,7 @@ export const Main = () => {
                 transition={{ duration: 0.5 }}
                 style={{ display: 'flex', justifyContent: 'center' }}
               >
-                <Typography.Title level={4}>
-                  <Image src="/noData.png.png" width={100} /> нет результатов(
-                </Typography.Title>
+                <Empty description='Обяъвления не найдены'/>
               </motion.div>
             )
           ) : (
