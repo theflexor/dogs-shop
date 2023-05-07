@@ -1,6 +1,7 @@
 .CardAnnoun {
   height: 235px !important;
   display: flex !important;
+
   // background: red !important;
   @media screen and (max-width: 480px) {
     height: 430px !important;
@@ -49,4 +50,14 @@
   height: 36px !important;
   width: 36px !important;
   border-radius: 100%;
+}
+
+.CardAnnoun-wrapper {
+  
+  .card-like {
+    img {
+      width: 30;
+      height: 30px;
+    }
+  }
 }
